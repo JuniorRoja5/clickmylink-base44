@@ -5,6 +5,10 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+
+  // 👇 ESTA ES LA LÍNEA QUE NECESITAS AÑADIR
+  base: "/clickmylink-base44/",
+
   server: {
     allowedHosts: true
   },
@@ -21,4 +25,4 @@ export default defineConfig({
       },
     },
   },
-}) 
+})
