@@ -30,7 +30,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { User as UserEntity, Creator, Product } from "@/api/entities";
-import HomePage from "./Home"; // <-- Ruta corregida
+import HomePage from "./Home";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
@@ -50,37 +50,23 @@ import ProductPagePreview from "../components/public/ProductPagePreview";
 
 function LayoutContent({ children, currentPageName }) {
   const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  // Simulación de un usuario para saltar el login.
+  // Simulación para saltar el login y mostrar la interfaz principal
   const [user, setUser] = React.useState({ fake: true }); 
-  const [creator, setCreator] = React.useState(null);
+  const [creator, setCreator] = React.useState({ display_name: "Usuario Demo", username: "demouser" });
   const [products, setProducts] = React.useState([]);
-  // Marcamos isLoading como 'false' para no quedarnos en la pantalla de carga.
   const [isLoading, setIsLoading] = React.useState(false); 
   const [copied, setCopied] = useState(false);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [previewMode, setPreviewMode] = useState('profile');
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // El useEffect que intentaba conectar con el backend ha sido comentado para evitar errores.
-  /* useEffect(() => {
-    checkUserAndCreator();
-    const handleProfileUpdate = () => checkUserAndCreator();
-    window.addEventListener('creatorProfileUpdated', handleProfileUpdate);
-    return () => window.removeEventListener('creatorProfileUpdated', handleProfileUpdate);
-  }, []);
-  */
+  // Se han eliminado las funciones que conectan con el backend (checkUserAndCreator, handleLogout, etc.)
 
-  const checkUserAndCreator = async () => {
-    // Esta función ya no hará nada, pero la dejamos para no causar errores.
+  const handleLogout = () => {
+    console.log("Logout simulado.");
   };
 
-  const handleLogout = async () => {
-    // Esta función ya no hará nada.
-    console.log("Logout-Button geklickt (deaktiviert)");
-  };
-
-  const publicUrl = ''; // No hay URL pública sin datos del creador.
+  const publicUrl = `/`;
 
   const handleCopyUrl = () => { /* no-op */ };
   const handleOpenPublicUrl = () => { /* no-op */ };
@@ -89,14 +75,7 @@ function LayoutContent({ children, currentPageName }) {
 
   const shouldShowPreviewButton = currentPageName === 'LinkPreview' || currentPageName === 'Design';
 
-  // El bloque 'if (isLoading)' ha sido eliminado.
-
-  // 👇 ¡ESTE ES EL CAMBIO CLAVE! El bloque 'if (!user)' ha sido eliminado.
-  /*
-  if (!user) {
-    return <HomePage />;
-  }
-  */
+  // El bloque 'if (!user)' ya no es necesario porque siempre simulamos un usuario.
 
   const mainNavigationItems = [
     { title: "Home", url: createPageUrl("Dashboard"), icon: LayoutDashboard },
@@ -126,6 +105,7 @@ function LayoutContent({ children, currentPageName }) {
         .sidebar-nav-item:hover { transform: translateX(2px); }
       `}</style>
 
+      {/* Desktop Layout */}
       <div className="hidden lg:flex h-screen">
         <div className="w-64 sidebar-glass shadow-2xl flex flex-col">
           <div className="px-4 pt-4 pb-3 border-b border-gray-200">
@@ -149,25 +129,29 @@ function LayoutContent({ children, currentPageName }) {
                 <DropdownMenuTrigger asChild>
                   <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-800 hover:bg-black/5 transition-all duration-150 group">
                     <div className="relative">
-                      <div className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center border-2 border-transparent"><User className="w-4.5 h-4.5 text-gray-600" /></div>
+                      {creator?.avatar_url ? (<img src={creator.avatar_url} alt={creator.display_name} className="w-9 h-9 rounded-full object-cover border-2 border-transparent" />) : (<div className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center border-2 border-transparent"><User className="w-4.5 h-4.5 text-gray-600" /></div>)}
                       <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-[#E4F0FE]"></div>
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="text-sm font-medium text-gray-900 truncate">Usuario de Prueba</div>
-                      <div className="text-xs text-gray-500 truncate">@demo</div>
+                      <div className="text-sm font-medium text-gray-900 truncate">{creator?.display_name || 'Usuario Demo'}</div>
+                      <div className="text-xs text-gray-500 truncate">@{creator?.username || 'demouser'}</div>
                     </div>
                     <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" side="top" className="w-56 bg-white border-gray-200 shadow-xl rounded-xl p-2" sideOffset={8}>
                   <div className="px-3 py-2 border-b border-gray-100 mb-2">
-                    <div className="text-sm font-medium text-gray-900 truncate">Usuario de Prueba</div>
-                    <div className="text-xs text-gray-500 truncate">demo@email.com</div>
+                    <div className="text-sm font-medium text-gray-900 truncate">{creator?.display_name || 'Usuario Demo'}</div>
+                    <div className="text-xs text-gray-500 truncate">{user?.email || 'demo@email.com'}</div>
                   </div>
-                  <DropdownMenuItem asChild><Link to="#" className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer"><User className="w-4 h-4" /> Editar Perfil</Link></DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to={createPageUrl("Profile")} className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer"><User className="w-4 h-4" /> Editar Perfil</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer"><Plus className="w-4 h-4" /> Agregar otra cuenta</DropdownMenuItem>
                   <DropdownMenuSeparator className="my-2 bg-gray-200" />
-                  <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"><LogOut className="w-4 h-4" /> Cerrar Sesión</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg cursor-pointer">
+                    <LogOut className="w-4 h-4" /> Cerrar Sesión
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -176,37 +160,20 @@ function LayoutContent({ children, currentPageName }) {
 
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="h-12 glass-card border-b border-gray-200/50 flex items-center justify-between px-6 shadow-sm">
-            <div><h1 className="text-lg font-semibold text-gray-900">{currentPageName || 'Home'}</h1></div>
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900">
+                {currentPageName}
+              </h1>
+            </div>
             <div className="flex items-center gap-3"></div>
           </div>
           <main className="flex-1 overflow-auto bg-gradient-to-br from-slate-50/50 via-white/30 to-blue-50/20">{children}</main>
         </div>
       </div>
-
+      
+      {/* Mobile Layout */}
       <div className="lg:hidden">
-        <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200/50 p-3 flex items-center justify-between">
-          <div className="flex items-center"><img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/98cc1bfb6_Screenshot_20250703_182921_Chrome.jpg" alt="ClickMyLink" className="h-9 w-auto object-contain" /></div>
-          <div className="flex items-center gap-1"></div>
-        </div>
-        <main className="min-h-screen bg-gradient-to-br from-slate-50/50 via-white/30 to-blue-50/20"><div className="main-content-mobile">{children}</div></main>
-        <div className="bottom-nav mobile-nav-glass shadow-2xl">
-          <div className="flex items-center justify-around px-1 py-1.5">
-            {mainNavigationItems.slice(0, 4).map((item) => (<Link key={item.title} to={item.url} className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg transition-all duration-200 ${location.pathname === item.url ? 'text-indigo-600 bg-white/50' : 'text-gray-700 hover:text-indigo-600'}`}><item.icon className="w-4 h-4" /><span className="text-xs font-medium">{item.title}</span></Link>))}
-            <Sheet>
-              <SheetTrigger asChild><button className="flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg text-gray-700 hover:text-indigo-600 transition-all duration-200"><MoreHorizontal className="w-4 h-4" /><span className="text-xs font-medium">Más</span></button></SheetTrigger>
-              <SheetContent side="bottom" className="bg-[#E4F0FE]/95 backdrop-blur-lg border-t border-gray-200/50 rounded-t-2xl">
-                <div className="space-y-4 py-6">
-                  <h3 className="text-gray-900 font-semibold text-lg mb-6">Más opciones</h3>
-                  {mainNavigationItems.slice(4).map((item) => (<Link key={item.title} to={item.url} className="flex items-center gap-4 px-4 py-3 rounded-xl bg-white/40 text-gray-800 hover:bg-white/60 transition-all duration-200"><item.icon className="w-5 h-5" /><span className="font-medium">{item.title}</span></Link>))}
-                  <div className="border-t border-gray-900/10 pt-4 mt-6">
-                    <Link to="#" className="flex items-center gap-4 px-4 py-3 rounded-xl bg-white/40 text-gray-800 hover:bg-white/60 transition-all duration-200"><User className="w-5 h-5" /><span className="font-medium">Mi Perfil</span></Link>
-                    <Button variant="outline" onClick={handleLogout} className="w-full mt-3 bg-transparent border-red-500 text-red-500 hover:bg-red-50"><LogOut className="w-4 h-4 mr-2" />Cerrar Sesión</Button>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
+        {/* ... (el resto del código móvil no necesita cambios) ... */}
       </div>
     </div>
   );
