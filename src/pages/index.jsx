@@ -1,4 +1,8 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from "./Layout.jsx";
+
+// Importamos todas las páginas que queremos poder ver
 import Dashboard from "./Dashboard";
 import Profile from "./Profile";
 import Home from "./Home";
@@ -7,7 +11,7 @@ import LinkPreview from "./LinkPreview";
 import Design from "./Design";
 import Customers from "./Customers";
 import Statistics from "./Statistics";
-import orders from "./orders";
+import Orders from "./orders"; // 'orders' está en minúscula según tu archivo original
 import Calendar from "./Calendar";
 import Referrals from "./Referrals";
 import EmailSequences from "./EmailSequences";
@@ -15,77 +19,37 @@ import InstagramAutomation from "./InstagramAutomation";
 import AskLink from "./AskLink";
 import PublicStorefront from "./PublicStorefront";
 import PublicProduct from "./PublicProduct";
-// La línea "import [ from ./[" ha sido eliminada.
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
-const PAGES = {
-    Dashboard: Dashboard,
-    Profile: Profile,
-    Home: Home,
-    PublicProfile: PublicProfile,
-    LinkPreview: LinkPreview,
-    Design: Design,
-    Customers: Customers,
-    Statistics: Statistics,
-    orders: orders,
-    Calendar: Calendar,
-    Referrals: Referrals,
-    EmailSequences: EmailSequences,
-    InstagramAutomation: InstagramAutomation,
-    AskLink: AskLink,
-    PublicStorefront: PublicStorefront,
-    PublicProduct: PublicProduct,
-    // La línea "[: [," ha sido eliminada.
-};
-
-function _getCurrentPage(url) {
-    if (url.endsWith('/')) {
-        url = url.slice(0, -1);
-    }
-    let urlLastPart = url.split('/').pop();
-    if (urlLastPart.includes('?')) {
-        urlLastPart = urlLastPart.split('?')[0];
-    }
-
-    const pageName = Object.keys(PAGES).find(page => page.toLowerCase() === urlLastPart.toLowerCase());
-    return pageName || Object.keys(PAGES)[0];
+function App() {
+  return (
+    <Router>
+      <Layout>
+        {/* Aquí definimos todas las rutas posibles dentro de nuestra aplicación */}
+        <Routes>
+          {/* Ruta por defecto: si no se especifica nada, muestra el Dashboard */}
+          <Route path="/" element={<Dashboard />} />
+          
+          {/* Rutas para cada una de las páginas */}
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Profile" element={<Profile />} />
+          <Route path="/Home" element={<Home />} />
+          <Route path="/PublicProfile" element={<PublicProfile />} />
+          <Route path="/LinkPreview" element={<LinkPreview />} />
+          <Route path="/Design" element={<Design />} />
+          <Route path="/Customers" element={<Customers />} />
+          <Route path="/Statistics" element={<Statistics />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/Calendar" element={<Calendar />} />
+          <Route path="/Referrals" element={<Referrals />} />
+          <Route path="/EmailSequences" element={<EmailSequences />} />
+          <Route path="/InstagramAutomation" element={<InstagramAutomation />} />
+          <Route path="/AskLink" element={<AskLink />} />
+          <Route path="/PublicStorefront" element={<PublicStorefront />} />
+          <Route path="/PublicProduct" element={<PublicProduct />} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
 }
 
-// Create a wrapper component that uses useLocation inside the Router context
-function PagesContent() {
-    const location = useLocation();
-    const currentPage = _getCurrentPage(location.pathname);
-
-    return (
-        <Layout currentPageName={currentPage}>
-            <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/Dashboard" element={<Dashboard />} />
-                <Route path="/Profile" element={<Profile />} />
-                <Route path="/Home" element={<Home />} />
-                <Route path="/PublicProfile" element={<PublicProfile />} />
-                <Route path="/LinkPreview" element={<LinkPreview />} />
-                <Route path="/Design" element={<Design />} />
-                <Route path="/Customers" element={<Customers />} />
-                <Route path="/Statistics" element={<Statistics />} />
-                <Route path="/orders" element={<orders />} />
-                <Route path="/Calendar" element={<Calendar />} />
-                <Route path="/Referrals" element={<Referrals />} />
-                <Route path="/EmailSequences" element={<EmailSequences />} />
-                <Route path="/InstagramAutomation" element={<InstagramAutomation />} />
-                <Route path="/AskLink" element={<AskLink />} />
-                <Route path="/PublicStorefront" element={<PublicStorefront />} />
-                <Route path="/PublicProduct" element={<PublicProduct />} />
-                {/* La Route inválida ha sido eliminada. */}
-            </Routes>
-        </Layout>
-    );
-}
-
-export default function Pages() {
-    return (
-        <Router>
-            <PagesContent />
-        </Router>
-    );
-}
+export default App;
