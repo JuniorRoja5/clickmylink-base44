@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from 'react';
 
 const LanguageContext = createContext();
@@ -91,7 +90,7 @@ const translations = {
     noStoreFound: "Tienda no encontrada",
     createProfileFirst: "Crea tu perfil primero",
     totalSales: "Ventas Totales",
-    orders: "Pedidos",
+    // "orders" key was duplicated, removed from here
     myProducts: "Mis Productos",
     browseCollection: "Explora mi colección de productos digitales",
     checkBackSoon: "Vuelve pronto para ver nuevos productos",
@@ -225,7 +224,7 @@ const translations = {
     noStoreFound: "No store found",
     createProfileFirst: "Create your profile first",
     totalSales: "Total Sales",
-    orders: "Orders",
+    // "orders" key was duplicated, removed from here
     myProducts: "My Products",
     browseCollection: "Browse my collection of digital products",
     checkBackSoon: "Check back soon for new products",
@@ -359,7 +358,7 @@ const translations = {
     noStoreFound: "Aucune boutique trouvée",
     createProfileFirst: "Créez d'abord votre profil",
     totalSales: "Ventes totales",
-    orders: "Commandes",
+    // "orders" key was duplicated, removed from here
     myProducts: "Mes produits",
     browseCollection: "Parcourir ma collection de produits numériques",
     checkBackSoon: "Revenez bientôt pour de nouveaux produits",
