@@ -29,9 +29,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-// LanguageProvider y LanguageSwitcher han sido eliminados por completo.
 import { User as UserEntity, Creator, Product } from "@/api/entities";
-import HomePage from "./pages/Home";
+// 👇 ¡ESTA ES LA LÍNEA CORREGIDA!
+import HomePage from "./Home";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
@@ -46,8 +46,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import ProfileView from "./components/public/ProfileView";
-import ProductPagePreview from "./components/public/ProductPagePreview";
+import ProfileView from "../components/public/ProfileView";
+import ProductPagePreview from "../components/public/ProductPagePreview";
 
 function LayoutContent({ children, currentPageName }) {
   const location = useLocation();
@@ -60,7 +60,6 @@ function LayoutContent({ children, currentPageName }) {
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [previewMode, setPreviewMode] = useState('profile');
   const [selectedProduct, setSelectedProduct] = useState(null);
-  // La función de traducción 't' ha sido eliminada.
 
   useEffect(() => {
     checkUserAndCreator();
@@ -216,7 +215,6 @@ function LayoutContent({ children, currentPageName }) {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              {/* El Language Switcher ha sido eliminado de aquí */}
             </div>
           </div>
         </div>
@@ -255,7 +253,6 @@ function LayoutContent({ children, currentPageName }) {
             {publicUrl && (<div className="relative"><Button onClick={handleCopyUrl} size="icon" variant="ghost" className="text-gray-600 hover:bg-gray-100 h-8 w-8 rounded-full">{copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}</Button><AnimatePresence>{copied && (<motion.div initial={{ opacity: 0, y: 10, x: '-50%' }} animate={{ opacity: 1, y: 0, x: '-50%' }} exit={{ opacity: 0, y: 10, x: '-50%' }} className="absolute left-1/2 -bottom-10 text-xs font-semibold px-2 py-1 bg-gray-800 text-white rounded-md shadow-lg whitespace-nowrap">Link copiado</motion.div>)}</AnimatePresence></div>)}
             {publicUrl && (<Button variant="ghost" size="icon" onClick={handleOpenPublicUrl} className="text-gray-600 hover:bg-gray-100 h-8 w-8 rounded-full"><ExternalLink className="w-4 h-4" /></Button>)}
             {shouldShowPreviewButton && (<button onClick={() => { setPreviewMode('profile'); setSelectedProduct(null); setShowMobilePreview(true); }} className="flex items-center gap-1 px-2 py-1 h-8 bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors"><Smartphone className="w-3 h-3 flex-shrink-0" /><div className="text-[10px] leading-[10px] font-medium"><div>Vista</div><div>Previa</div></div></button>)}
-            {/* El Language Switcher ha sido eliminado de aquí */}
           </div>
         </div>
         <main className="min-h-screen bg-gradient-to-br from-slate-50/50 via-white/30 to-blue-50/20"><div className="main-content-mobile">{children}</div></main>
@@ -293,7 +290,6 @@ function LayoutContent({ children, currentPageName }) {
 }
 
 export default function Layout({ children, currentPageName }) {
-  // El LanguageProvider que causaba el error ha sido eliminado de aquí
   return (
     <LayoutContent children={children} currentPageName={currentPageName} />
   );
